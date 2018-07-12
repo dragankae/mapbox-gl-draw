@@ -4,7 +4,8 @@ const constrainFeatureMovement = require('../lib/constrain_feature_movement');
 const doubleClickZoom = require('../lib/double_click_zoom');
 const Constants = require('../constants');
 const CommonSelectors = require('../lib/common_selectors');
-const moveFeatures = require('../lib/move_features');
+const moveFeatures = require('../lib/move_features'); 
+const snapTo = require('../lib/snap_to');
 
 const isVertex = isOfMetaType(Constants.meta.VERTEX);
 const isMidpoint = isOfMetaType(Constants.meta.MIDPOINT);
@@ -201,7 +202,11 @@ DirectSelect.onTouchStart = DirectSelect.onMouseDown = function(state, e) {
 DirectSelect.onDrag = function(state, e) {
   if (state.canDragMove !== true) return;
   state.dragMoving = true;
-  e.originalEvent.stopPropagation();
+  e.originalEvent.stopPropagation(); 
+  
+  if (!this._ctx.snapToOverride && e.point && this._ctx.options.snapTo) {
+    e = snapTo(e, this._ctx, state.featureId);
+  }
 
   const delta = {
     lng: e.lngLat.lng - state.dragMoveLocation.lng,

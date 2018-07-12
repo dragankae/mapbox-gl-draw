@@ -192,5 +192,15 @@ module.exports = function(ctx, api) {
     return api;
   };
 
+  api.addSnapLayers = function(layerIds) {
+    ctx.store.addSnapLayers(layerIds);
+    return api;
+  };
+
+  api.deleteSnapLayers = function(layerIds) {
+    ctx.store.deleteSnapLayers(layerIds);
+    return api;
+  };
+
   return api;
 };

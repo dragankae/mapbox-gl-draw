@@ -2,9 +2,11 @@ const CommonSelectors = require('../lib/common_selectors');
 const isEventAtCoordinates = require('../lib/is_event_at_coordinates');
 const doubleClickZoom = require('../lib/double_click_zoom');
 const Constants = require('../constants');
-const createVertex = require('../lib/create_vertex');
+const createVertex = require('../lib/create_vertex'); 
+const snapTo = require('../lib/snap_to');
 
-const DrawLineString = {};
+const DrawLineString = {}; 
+let snapClickPoint;
 
 DrawLineString.onSetup = function(opts) {
   opts = opts || {};
@@ -68,7 +70,10 @@ DrawLineString.onSetup = function(opts) {
   };
 };
 
-DrawLineString.clickAnywhere = function(state, e) {
+DrawLineString.clickAnywhere = function(state, e) { 
+  
+  e = snapClickPoint || e;
+
   if (state.currentVertexPosition > 0 && isEventAtCoordinates(e, state.line.coordinates[state.currentVertexPosition - 1]) ||
       state.direction === 'backwards' && isEventAtCoordinates(e, state.line.coordinates[state.currentVertexPosition + 1])) {
     return this.changeMode(Constants.modes.SIMPLE_SELECT, { featureIds: [state.line.id] });
@@ -87,7 +92,14 @@ DrawLineString.clickOnVertex = function(state) {
   return this.changeMode(Constants.modes.SIMPLE_SELECT, { featureIds: [state.line.id] });
 };
 
-DrawLineString.onMouseMove = function(state, e) {
+DrawLineString.onMouseMove = function(state, e) { 
+  
+  if (!this._ctx.snapToOverride && e.point && this._ctx.options.snapTo) {
+    e = snapTo(e, this._ctx, state.line.id);
+  }
+
+  snapClickPoint = e;
+
   state.line.updateCoordinate(state.currentVertexPosition, e.lngLat.lng, e.lngLat.lat);
   if (CommonSelectors.isVertex(e)) {
     this.updateUIClasses({ mouse: Constants.cursors.POINTER });

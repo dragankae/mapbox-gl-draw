@@ -17,12 +17,12 @@
     "docs": "npm run docs-modes-life-cycle && npm run docs-modes-get-and-set",
     "docs-modes-get-and-set": "documentation readme --readme-file ./docs/MODES.md -s \"Setters and Getters\" src/modes/mode_interface_accessors.js --shallow",
     "docs-modes-life-cycle": "documentation readme --readme-file ./docs/MODES.md -s \"Life Cycle Functions\" src/modes/mode_interface.js --shallow",
-    "test": "NODE_ENV=test npm run lint && npm run tape",
+    "test": "SET NODE_ENV=test npm run lint && npm run tape",
     "lint": "eslint --no-eslintrc -c .eslintrc index.js src test",
     "tape": "tape -r ./test/mock-browser.js -r babel-register test/*.test.js",
-    "coverage": "NODE_ENV=test nyc --reporter html npm run tape && opener coverage/index.html",
-    "build": "NODE_ENV=production browserify index.js --standalone MapboxDraw > dist/mapbox-gl-draw.js",
-    "prepublish": "NODE_ENV=production browserify index.js --standalone MapboxDraw | uglifyjs -c -m > dist/mapbox-gl-draw.js",
+    "coverage": "SET NODE_ENV=test nyc --reporter html npm run tape && opener coverage/index.html",
+    "build": "SET NODE_ENV=production && browserify index.js --standalone MapboxDraw > dist/mapbox-gl-draw.js",
+    "prepublish": "SET NODE_ENV=production && browserify index.js --standalone MapboxDraw | uglifyjs -c -m > dist/mapbox-gl-draw.js",
     "start": "node server.js"
   },
   "repository": {
@@ -58,7 +58,7 @@
     "eslint-config-mourner": "^2.0.1",
     "express": "^4.13.4",
     "mapbox-gl": "0.45.0",
-    "mapbox-gl-js-mock": "0.28.0",
+    "mapbox-gl-js-mock": "1.0.2",
     "mock-browser": "^0.92.10",
     "nyc": "^12.0.1",
     "opener": "^1.4.1",
@@ -73,12 +73,14 @@
   },
   "dependencies": {
     "@mapbox/geojson-area": "^0.2.1",
+    "@mapbox/geojson-extent": "^0.3.2",
     "@mapbox/geojson-normalize": "0.0.1",
     "@mapbox/geojsonhint": "^2.0.0",
-    "@mapbox/geojson-extent": "^0.3.2",
+    "@mapbox/point-geometry": "0.1.0",
+    "@turf/turf": "^5.1.6",
+    "cheap-ruler": "^2.5.1",
     "hat": "0.0.3",
     "lodash.isequal": "^4.2.0",
-    "@mapbox/point-geometry": "0.1.0",
     "xtend": "^4.0.1"
   }
 }

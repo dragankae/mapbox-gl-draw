@@ -7,9 +7,11 @@ const defaultOptions = {
   touchEnabled: true,
   clickBuffer: 2,
   touchBuffer: 25,
-  boxSelect: true,
+  boxSelect: true, 
+  snapTo: false,
   displayControlsDefault: true,
   styles: require('./lib/theme'),
+  snapStyle: require('./lib/snap_theme'),
   modes: require('./modes'),
   controls: {},
   userProperties: false

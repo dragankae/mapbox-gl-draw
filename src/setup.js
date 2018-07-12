@@ -22,7 +22,8 @@ module.exports = function(ctx) {
       ctx.ui.clearMapClasses();
       ctx.map = null;
       ctx.container = null;
-      ctx.store = null;
+      ctx.store = null; 
+      ctx.snapToOverride = false;
 
       if (controlContainer && controlContainer.parentNode) controlContainer.parentNode.removeChild(controlContainer);
       controlContainer = null;
