@@ -5,7 +5,7 @@ const doubleClickZoom = require('../lib/double_click_zoom');
 const Constants = require('../constants');
 const CommonSelectors = require('../lib/common_selectors');
 const moveFeatures = require('../lib/move_features'); 
-const snapTo = require('../lib/snap_to');
+const { snapTo } = require('../lib/snap_to');
 
 const isVertex = isOfMetaType(Constants.meta.VERTEX);
 const isMidpoint = isOfMetaType(Constants.meta.MIDPOINT);

@@ -3,6 +3,7 @@ const toDenseArray = require('./lib/to_dense_array');
 const StringSet = require('./lib/string_set');
 const render = require('./render');
 const interactions = require('./constants').interactions;
+const { cleanSnapTo } = require('./lib/snap_to');
 
 const Store = module.exports = function (ctx) {
   this._features = {};
@@ -179,6 +180,11 @@ Store.prototype.deselect = function (featureIds, options = {}) {
     }
   });
   refreshSelectedCoordinates.call(this, options);
+
+  if (this.ctx.options.snapTo) {
+    cleanSnapTo(this.ctx);
+  }
+
   return this;
 };
 

@@ -63,7 +63,7 @@ function findConnectingLine(startPoint, endPoint, geojson) {
 
 
 // All are required
-module.exports = function snapTo(evt, ctx, id) {
+function snapTo(evt, ctx, id) {
   if (ctx.map === null) return [];
 
   const line = ctx.store.get(id);
@@ -109,7 +109,7 @@ module.exports = function snapTo(evt, ctx, id) {
     box[0] = [pos1.x, pos1.y];
     box[1] = [pos2.x, pos2.y];
   }
-  
+
   const snapFilter = { layers: ctx.store._snapLayers.values() };
 
   const featureIds = new StringSet();
@@ -258,3 +258,15 @@ module.exports = function snapTo(evt, ctx, id) {
   }
   return evt;
 };
+
+// All are required
+function cleanSnapTo(ctx) {
+  if (ctx.map === null || ctx.map.getSource("snap-source") === undefined) return;
+  ctx.map.getSource("snap-source").setData(turf.featureCollection([]));
+}
+
+
+module.exports = {
+  snapTo,
+  cleanSnapTo
+}

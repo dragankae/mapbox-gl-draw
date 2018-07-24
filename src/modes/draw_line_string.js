@@ -2,13 +2,13 @@ const CommonSelectors = require('../lib/common_selectors');
 const isEventAtCoordinates = require('../lib/is_event_at_coordinates');
 const doubleClickZoom = require('../lib/double_click_zoom');
 const Constants = require('../constants');
-const createVertex = require('../lib/create_vertex'); 
-const snapTo = require('../lib/snap_to');
+const createVertex = require('../lib/create_vertex');
+const { snapTo } = require('../lib/snap_to');
 
-const DrawLineString = {}; 
+const DrawLineString = {};
 let snapClickPoint;
 
-DrawLineString.onSetup = function(opts) {
+DrawLineString.onSetup = function (opts) {
   opts = opts || {};
   const featureId = opts.featureId;
 
@@ -70,12 +70,12 @@ DrawLineString.onSetup = function(opts) {
   };
 };
 
-DrawLineString.clickAnywhere = function(state, e) { 
-  
+DrawLineString.clickAnywhere = function (state, e) {
+
   e = snapClickPoint || e;
 
   if (state.currentVertexPosition > 0 && isEventAtCoordinates(e, state.line.coordinates[state.currentVertexPosition - 1]) ||
-      state.direction === 'backwards' && isEventAtCoordinates(e, state.line.coordinates[state.currentVertexPosition + 1])) {
+    state.direction === 'backwards' && isEventAtCoordinates(e, state.line.coordinates[state.currentVertexPosition + 1])) {
     return this.changeMode(Constants.modes.SIMPLE_SELECT, { featureIds: [state.line.id] });
   }
   this.updateUIClasses({ mouse: Constants.cursors.ADD });
@@ -88,12 +88,12 @@ DrawLineString.clickAnywhere = function(state, e) {
   }
 };
 
-DrawLineString.clickOnVertex = function(state) {
+DrawLineString.clickOnVertex = function (state) {
   return this.changeMode(Constants.modes.SIMPLE_SELECT, { featureIds: [state.line.id] });
 };
 
-DrawLineString.onMouseMove = function(state, e) { 
-  
+DrawLineString.onMouseMove = function (state, e) {
+
   if (!this._ctx.snapToOverride && e.point && this._ctx.options.snapTo) {
     e = snapTo(e, this._ctx, state.line.id);
   }
@@ -106,12 +106,12 @@ DrawLineString.onMouseMove = function(state, e) {
   }
 };
 
-DrawLineString.onTap = DrawLineString.onClick = function(state, e) {
+DrawLineString.onTap = DrawLineString.onClick = function (state, e) {
   if (CommonSelectors.isVertex(e)) return this.clickOnVertex(state, e);
   this.clickAnywhere(state, e);
 };
 
-DrawLineString.onKeyUp = function(state, e) {
+DrawLineString.onKeyUp = function (state, e) {
   if (CommonSelectors.isEnterKey(e)) {
     this.changeMode(Constants.modes.SIMPLE_SELECT, { featureIds: [state.line.id] });
   } else if (CommonSelectors.isEscapeKey(e)) {
@@ -120,7 +120,7 @@ DrawLineString.onKeyUp = function(state, e) {
   }
 };
 
-DrawLineString.onStop = function(state) {
+DrawLineString.onStop = function (state) {
   doubleClickZoom.enable(this);
   this.activateUIButton();
 
@@ -139,12 +139,12 @@ DrawLineString.onStop = function(state) {
   }
 };
 
-DrawLineString.onTrash = function(state) {
+DrawLineString.onTrash = function (state) {
   this.deleteFeature([state.line.id], { silent: true });
   this.changeMode(Constants.modes.SIMPLE_SELECT);
 };
 
-DrawLineString.toDisplayFeatures = function(state, geojson, display) {
+DrawLineString.toDisplayFeatures = function (state, geojson, display) {
   const isActiveLine = geojson.properties.id === state.line.id;
   geojson.properties.active = (isActiveLine) ? Constants.activeStates.ACTIVE : Constants.activeStates.INACTIVE;
   if (!isActiveLine) return display(geojson);

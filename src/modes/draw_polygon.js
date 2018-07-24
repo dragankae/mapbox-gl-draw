@@ -3,7 +3,7 @@ const doubleClickZoom = require('../lib/double_click_zoom');
 const Constants = require('../constants');
 const isEventAtCoordinates = require('../lib/is_event_at_coordinates');
 const createVertex = require('../lib/create_vertex'); 
-const snapTo = require('../lib/snap_to');
+const { snapTo } = require('../lib/snap_to');
 
 const DrawPolygon = {}; 
 let snapClickPoint;
