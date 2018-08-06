@@ -69,7 +69,7 @@ function snapTo(evt, ctx, id) {
   const line = ctx.store.get(id);
   let lastLinePoint = null;
 
-  const buffer = 20; // ctx.options.snapBuffer;
+  const buffer = ctx.options.snapBuffer;
   const box = [
     [evt.point.x - buffer, evt.point.y - buffer],
     [evt.point.x + buffer, evt.point.y + buffer]

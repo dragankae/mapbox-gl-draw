@@ -9,6 +9,7 @@ const defaultOptions = {
   touchBuffer: 25,
   boxSelect: true, 
   snapTo: false,
+  snapBuffer: 20,
   displayControlsDefault: true,
   styles: require('./lib/theme'),
   snapStyle: require('./lib/snap_theme'),
