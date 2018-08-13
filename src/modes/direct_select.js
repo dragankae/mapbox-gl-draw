@@ -206,6 +206,14 @@ DirectSelect.onDrag = function(state, e) {
   
   if (!this._ctx.snapToOverride && e.point && this._ctx.options.snapTo) {
     e = snapTo(e, this._ctx, state.featureId);
+
+    const selectedCoords = state.selectedCoordPaths.map(coord_path => state.feature.getCoordinate(coord_path))[0];
+    if(selectedCoords) {
+      state.dragMoveLocation = {
+        lng: selectedCoords[0],
+        lat: selectedCoords[1]
+      };
+    }
   }
 
   const delta = {

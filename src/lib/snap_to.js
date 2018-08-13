@@ -66,8 +66,8 @@ function findConnectingLine(startPoint, endPoint, geojson) {
 function snapTo(evt, ctx, id) {
   if (ctx.map === null) return [];
 
-  const line = ctx.store.get(id);
-  let lastLinePoint = null;
+  const feature = ctx.store.get(id);
+  let lastFeaturePoint = null;
 
   const buffer = ctx.options.snapBuffer;
   const box = [
@@ -76,10 +76,16 @@ function snapTo(evt, ctx, id) {
   ];
 
   let distanceBox = null;
-  if (line && line.coordinates.length > 1) {
-    // todo check rouler.bufferBBox
-    lastLinePoint = line.coordinates[line.coordinates.length - 2];
-    const lastPoint = ctx.map.project(lastLinePoint);
+  if (feature && feature.coordinates.length > 1) {
+
+    if (feature.type == 'Point') {
+      lastFeaturePoint = feature.coordinates;
+    } else {
+      // todo check rouler.bufferBBox
+      lastFeaturePoint = feature.coordinates[feature.coordinates.length - 2];
+    }
+
+    const lastPoint = ctx.map.project(lastFeaturePoint);
 
     const extendBox = [
       [lastPoint.x - buffer, lastPoint.y - buffer],
@@ -99,8 +105,8 @@ function snapTo(evt, ctx, id) {
     distanceBox = [[bbox[0], bbox[1]], [bbox[2], bbox[1]],
     [bbox[2], bbox[3]], [bbox[0], bbox[3]], [bbox[0], bbox[1]]];
     /*    distanceBox = [
-     [evt.lngLat.lng, evt.lngLat.lat], [lastLinePoint[0], evt.lngLat.lat],
-     [lastLinePoint[0], lastLinePoint[1]], [evt.lngLat.lng, lastLinePoint[1]],
+     [evt.lngLat.lng, evt.lngLat.lat], [lastFeaturePoint[0], evt.lngLat.lat],
+     [lastFeaturePoint[0], lastFeaturePoint[1]], [evt.lngLat.lng, lastFeaturePoint[1]],
      [evt.lngLat.lng, evt.lngLat.lat]
      ];*/
 
@@ -242,8 +248,8 @@ function snapTo(evt, ctx, id) {
     evt.lngLat.lat = closestCoord[1];
 
     let pointsBetween = null;
-    if (lastLinePoint) {
-      pointsBetween = findConnectingLine(closestCoord, lastLinePoint, selectedElements);
+    if (lastFeaturePoint) {
+      pointsBetween = findConnectingLine(closestCoord, lastFeaturePoint, selectedElements);
     }
     evt.point = ctx.map.project(closestCoord);
     evt.snap = true;

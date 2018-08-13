@@ -4,6 +4,7 @@ const createSupplementaryPoints = require('../lib/create_supplementary_points');
 const StringSet = require('../lib/string_set');
 const doubleClickZoom = require('../lib/double_click_zoom');
 const moveFeatures = require('../lib/move_features');
+const { snapTo } = require('../lib/snap_to');
 const Constants = require('../constants');
 
 const SimpleSelect = {};
@@ -222,6 +223,15 @@ SimpleSelect.onTouchStart = function(state, e) {
 };
 
 SimpleSelect.onDrag = function(state, e) {
+  if (!this._ctx.snapToOverride && e.point && this._ctx.options.snapTo) {
+    let selected = this.getSelected()[0];
+    e = snapTo(e, this._ctx, selected.id);
+
+    state.dragMoveLocation = {
+      lng: selected.coordinates[0],
+      lat: selected.coordinates[1]
+    };
+  }
   if (state.canDragMove) return this.dragMove(state, e);
   if (this.drawConfig.boxSelect && state.canBoxSelect) return this.whileBoxSelect(state, e);
 };
