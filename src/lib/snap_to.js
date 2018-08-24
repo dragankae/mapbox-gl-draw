@@ -149,7 +149,7 @@ function snapTo(evt, ctx, id) {
       data: eventPoint
     });
   }
-  if (ctx.map.getLayer("snap-layer") === undefined) {
+  if (ctx.map.getLayer("snap-layer") === undefined && !!ctx.options.enableSnapStyle) {
     ctx.map.addLayer(xtend({
       id: "snap-layer",
       source: "snap-source"

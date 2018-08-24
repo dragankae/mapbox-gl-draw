@@ -12,6 +12,7 @@ const defaultOptions = {
   snapBuffer: 20,
   displayControlsDefault: true,
   styles: require('./lib/theme'),
+  enableSnapStyle: true,
   snapStyle: require('./lib/snap_theme'),
   modes: require('./modes'),
   controls: {},
