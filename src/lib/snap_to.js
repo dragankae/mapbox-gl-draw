@@ -66,10 +66,15 @@ function findConnectingLine(startPoint, endPoint, geojson) {
 function snapTo(evt, ctx, id) {
   if (ctx.map === null) return [];
 
+  const zoom = evt.target.getZoom();
   const feature = ctx.store.get(id);
+  const distanceBuffer = 0.0004;
   let lastFeaturePoint = null;
 
-  const buffer = ctx.options.snapBuffer;
+  const exGrowthA = Math.pow(zoom / 22, 5);
+  const exGrowthB = Math.pow(zoom / 22, 15);
+
+  const buffer = ctx.options.snapBuffer / exGrowthA;
   const box = [
     [evt.point.x - buffer, evt.point.y - buffer],
     [evt.point.x + buffer, evt.point.y + buffer]
@@ -231,8 +236,8 @@ function snapTo(evt, ctx, id) {
         const singleCoords = pointType.coords;
         const dist = ruler.distance(singleCoords, evtCoords);
         if (dist !== null) {
-          if ((closestDistance === null || ((pointType.type === "vertex" && dist < 0.004) ||
-            (dist < closestDistance))) && dist < 0.008) {
+          if ((closestDistance === null || ((pointType.type === "vertex" && dist < distanceBuffer / exGrowthB) ||
+            (dist < closestDistance))) && dist < distanceBuffer / exGrowthA) {
             feature.distance = dist;
             closestFeature = feature;
             closestCoord = singleCoords;
